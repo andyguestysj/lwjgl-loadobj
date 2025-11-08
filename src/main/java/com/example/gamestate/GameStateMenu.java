@@ -18,6 +18,8 @@ import org.joml.Vector3f;
 import com.example.inputHandler;
 import com.example.Main;
 import com.example.Object;
+import java.util.ArrayList;
+import com.example.Mesh;
 
 public class GameStateMenu extends GameState {
 
@@ -62,8 +64,12 @@ public class GameStateMenu extends GameState {
 
 		for (Object anObject : objects){	
 			main.uniforms.setUniform("modelMatrix", anObject.getTransforms());
-			glBindVertexArray(anObject.getMesh().getMeshID());
-			glDrawElements(GL_TRIANGLES, anObject.getMesh().getVertexCount(), GL_UNSIGNED_INT, 0);	
+      for (Mesh meshObj : anObject.getMeshes()) {        
+        glBindVertexArray(meshObj.getMeshID());
+        glDrawElements(GL_TRIANGLES, meshObj.getVertexCount(), GL_UNSIGNED_INT, 0);	
+      }
+			//glBindVertexArray(anObject.getMesh().getMeshID());
+			//glDrawElements(GL_TRIANGLES, anObject.getMesh().getVertexCount(), GL_UNSIGNED_INT, 0);	
 		}
 
 		glBindVertexArray(0);

@@ -14,7 +14,9 @@ import static org.lwjgl.opengl.GL30.glBindVertexArray;
 
 import com.example.inputHandler;
 import com.example.Main;
+import com.example.Mesh;
 import com.example.Object;
+import java.util.ArrayList;
 
 public class GameStateGame extends GameState {
 
@@ -47,9 +49,13 @@ public class GameStateGame extends GameState {
     main.uniforms.setUniform("projectionMatrix", main.camera.getPerspectiveProjectionMatrix());
 
     for (Object anObject : main.world.objects){				
-			main.uniforms.setUniform("modelMatrix", anObject.getTransforms());	
-			glBindVertexArray(anObject.getMesh().getMeshID());
-			glDrawElements(GL_TRIANGLES, anObject.getMesh().getVertexCount(), GL_UNSIGNED_INT, 0);	
+			main.uniforms.setUniform("modelMatrix", anObject.getTransforms());	      
+      for (Mesh meshObj : anObject.getMeshes()) {
+        glBindVertexArray(meshObj.getMeshID());
+        glDrawElements(GL_TRIANGLES, meshObj.getVertexCount(), GL_UNSIGNED_INT, 0);	
+      }
+			//glBindVertexArray(anObject.getMesh().getMeshID());
+			//glDrawElements(GL_TRIANGLES, anObject.getMesh().getVertexCount(), GL_UNSIGNED_INT, 0);	
 		}
 
 		glBindVertexArray(0);

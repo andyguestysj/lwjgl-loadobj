@@ -98,7 +98,7 @@ public class World {
 
   public void cleanUpObjects(){
     for (Object anObject : objects){	
-      anObject.getMesh().cleanUp();
+      anObject.cleanup();
     }
   }
 

@@ -2,6 +2,7 @@ package com.example;
 
 import org.joml.Matrix4f;
 import org.joml.Vector3f;
+import java.util.ArrayList;
 
 
 public class Object {
@@ -12,7 +13,7 @@ private float size;
 private	Vector3f translation;
 private	Vector3f rotation;
 private	float scale;
-private Mesh mesh;
+public ArrayList<Mesh> meshObjects;	
 
 
   public Object(String name, String type, float size, Vector3f translation, Vector3f rotation, Vector3f scale ) {
@@ -22,18 +23,18 @@ private Mesh mesh;
     this.translation = translation;
     this.rotation = rotation;
     this.scale = size;  
+		meshObjects = new ArrayList<Mesh>();
 
-    if (this.type.equals("Cube")){      
-      this.mesh = makeCube(this.size);      
-    }
-    else if (this.type.equals("Square")){
+    if (this.type.equals("Cube")) {
+      meshObjects.add(makeCube(this.size));
+    } else if (this.type.equals("Square")) {
 			float[] col1 = {0.5f,0.0f,0.0f};
 			float[] col2 = {0.0f,0.5f,0.0f};
 
 			if (name.equals("col1"))
-				this.mesh = makeSquare(this.size, col1);
+				meshObjects.add(makeSquare(this.size, col1));
 			else
-				this.mesh = makeSquare(this.size, col2);
+				meshObjects.add(makeSquare(this.size, col2));
     }
     
   }
@@ -59,8 +60,8 @@ public Matrix4f getTransforms(){
   return myMatrix;
 }
 
-public Mesh getMesh() {
-    return mesh;
+public ArrayList<Mesh> getMeshes() {
+    return meshObjects;
   }
 
 public Mesh makeCube(float size){
@@ -169,7 +170,9 @@ public Mesh makeCube(float size){
 	}
 
 	public void cleanup(){
-		mesh.cleanUp();
+		for (Mesh mesh : meshObjects) {
+			mesh.cleanUp();
+		}
 	}
 
 }
