@@ -6,10 +6,12 @@ import java.util.Map;
 
 import org.joml.Matrix4f;
 import org.joml.Vector3f;
+import org.joml.Vector4f;
 import org.lwjgl.system.MemoryStack;
 import static org.lwjgl.opengl.GL20.glGetUniformLocation;
 import static org.lwjgl.opengl.GL20.glUniformMatrix4fv;
 import static org.lwjgl.opengl.GL20.glUniform3f;
+import static org.lwjgl.opengl.GL20.glUniform4f;
 import static org.lwjgl.opengl.GL20.glUniform1f;
 
 public class Uniforms {
@@ -24,6 +26,8 @@ public class Uniforms {
 		createUniform("projectionMatrix");
 		createUniform("viewMatrix");
 		createUniform("modelMatrix");    
+		createUniform("txtSampler");
+    createUniform("material.diffuse");
   }
 
 	public void createUniform(String uniformName) throws Exception {
@@ -51,4 +55,8 @@ public class Uniforms {
 		public void setUniform(String uniformName, float value) {
 			glUniform1f(uniforms.get(uniformName), value);
 	}
+    public void setUniform(String uniformName, Vector4f value) {
+        glUniform4f(uniforms.get(uniformName), value.x, value.y, value.z, value.w);
+    }
+	
 }

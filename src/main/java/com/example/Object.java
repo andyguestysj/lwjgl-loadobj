@@ -113,7 +113,7 @@ public Mesh makeCube(float size){
 		};
 
     //System.out.println("Creating cube mesh with "+positions.length/3+" vertices and "+indices.length/3+" triangles.");
-		return new Mesh("Cube", positions, colors, indices);
+		return new Mesh(positions, colors, indices);
    
 
 	}
@@ -142,7 +142,7 @@ public Mesh makeCube(float size){
 			0, 2, 3  // second triangle
 		};
 
-		return new Mesh("Square", positions, colors, indices);
+		return new Mesh(positions, colors, indices);
 	}
 
 
@@ -170,9 +170,7 @@ public Mesh makeCube(float size){
 	}
 
 	public void cleanup(){
-		for (Mesh mesh : meshObjects) {
-			mesh.cleanUp();
-		}
+		
 	}
 
 }

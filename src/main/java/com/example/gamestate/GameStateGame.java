@@ -12,54 +12,85 @@ import static org.lwjgl.opengl.GL20.glGetProgrami;
 import static org.lwjgl.opengl.GL20.glUseProgram;
 import static org.lwjgl.opengl.GL30.glBindVertexArray;
 
-import com.example.inputHandler;
-import com.example.Main;
-import com.example.Mesh;
-import com.example.Object;
+import com.example.*;
+
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
+
+import static org.lwjgl.opengl.GL20.*;
 
 public class GameStateGame extends GameState {
 
   public GameStateType state;
 
-
-  public GameStateGame(){
-    state = GameStateType.GAME;    
-  }  
-
-  public void initialise(){
+  public GameStateGame() {
+    state = GameStateType.GAME;
   }
 
-  public void update(inputHandler inputHandler){
+  public void initialise() {
+  }
+
+  public void update(inputHandler inputHandler) {
     // read input
     inputHandler.processInput();
     // update
     inputHandler.executeCommands();
-  }  
+  }
 
-  public void render(Main main){
-		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT); // clear the framebuffer
+  public void render(Main main) {
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT); // clear the framebuffer
 
-		glUseProgram(main.uniforms.programID);
-		if (glGetProgrami(main.uniforms.programID, GL_LINK_STATUS) == 0) {			
-			throw new RuntimeException("Error linking Shader code: " + glGetProgramInfoLog(main.uniforms.programID, 1024));
-		}
+    glUseProgram(main.uniforms.programID);
+    if (glGetProgrami(main.uniforms.programID, GL_LINK_STATUS) == 0) {
+      throw new RuntimeException("Error linking Shader code: " + glGetProgramInfoLog(main.uniforms.programID, 1024));
+    }
 
-		main.uniforms.setUniform("viewMatrix", main.camera.getViewMatrixFPS());
+    main.uniforms.setUniform("viewMatrix", main.camera.getViewMatrixFPS());
     main.uniforms.setUniform("projectionMatrix", main.camera.getPerspectiveProjectionMatrix());
 
-    for (Object anObject : main.world.objects){				
-			main.uniforms.setUniform("modelMatrix", anObject.getTransforms());	      
-      for (Mesh meshObj : anObject.getMeshes()) {
-        glBindVertexArray(meshObj.getMeshID());
-        glDrawElements(GL_TRIANGLES, meshObj.getVertexCount(), GL_UNSIGNED_INT, 0);	
-      }
-			//glBindVertexArray(anObject.getMesh().getMeshID());
-			//glDrawElements(GL_TRIANGLES, anObject.getMesh().getVertexCount(), GL_UNSIGNED_INT, 0);	
-		}
+    main.uniforms.setUniform("txtSampler", 0);
 
-		glBindVertexArray(0);
-		glUseProgram(0);
+    Collection<Model> models = main.world.getModelMap().values();
+    TextureCache textureCache = main.world.getTextureCache();
+
+    int count=0;
+
+    for (Model model : models) {
+      List<Entity> entities = model.getEntitiesList();
+
+      for (Material material : model.getMaterialList()) {
+        main.uniforms.setUniform("material.diffuse", material.getDiffuseColor());
+        Texture texture = textureCache.getTexture(material.getTexturePath());
+        glActiveTexture(GL_TEXTURE0);
+        texture.bind();
+
+        for (Mesh mesh : material.getMeshList()) {
+          glBindVertexArray(mesh.getVaoId());
+          for (Entity entity : entities) {
+            main.uniforms.setUniform("modelMatrix", entity.getModelMatrix());
+            System.out.println("Rendering entity " + count++);
+            glDrawElements(GL_TRIANGLES, mesh.getNumVertices(), GL_UNSIGNED_INT, 0);
+          }
+        }
+      }
+    }
+
+    /*
+     * for (Object anObject : main.world.objects){
+     * main.uniforms.setUniform("modelMatrix", anObject.getTransforms());
+     * for (Mesh meshObj : anObject.getMeshes()) {
+     * glBindVertexArray(meshObj.getMeshID());
+     * glDrawElements(GL_TRIANGLES, meshObj.getVertexCount(), GL_UNSIGNED_INT, 0);
+     * }
+     * //glBindVertexArray(anObject.getMesh().getMeshID());
+     * //glDrawElements(GL_TRIANGLES, anObject.getMesh().getVertexCount(),
+     * GL_UNSIGNED_INT, 0);
+     * }
+     */
+
+    glBindVertexArray(0);
+    glUseProgram(0);
   }
 
 }

@@ -61,7 +61,7 @@ public class GameStateMenu extends GameState {
 
 
 
-
+/*
 		for (Object anObject : objects){	
 			main.uniforms.setUniform("modelMatrix", anObject.getTransforms());
       for (Mesh meshObj : anObject.getMeshes()) {        
@@ -70,7 +70,7 @@ public class GameStateMenu extends GameState {
       }
 			//glBindVertexArray(anObject.getMesh().getMeshID());
 			//glDrawElements(GL_TRIANGLES, anObject.getMesh().getVertexCount(), GL_UNSIGNED_INT, 0);	
-		}
+		} */
 
 		glBindVertexArray(0);
 		glUseProgram(0);
