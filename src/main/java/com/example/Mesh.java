@@ -35,9 +35,6 @@ public class Mesh {
             // Positions VBO
             int vboId = glGenBuffers();
             vboIdList.add(vboId);
-            System.out.println("Creating mesh with " + positions.length / 3 + " vertices and " + indices.length / 3 + " triangles.");
-            //FloatBuffer positionsBuffer = stack.callocFloat(positions.length);
-            //positionsBuffer.put(0, positions);
             FloatBuffer positionsBuffer = MemoryUtil.memAllocFloat(positions.length);
             positionsBuffer.put(positions).flip();            
             glBindBuffer(GL_ARRAY_BUFFER, vboId);
@@ -48,8 +45,6 @@ public class Mesh {
             // Texture coordinates VBO
             vboId = glGenBuffers();
             vboIdList.add(vboId);
-            //FloatBuffer textCoordsBuffer = stack.callocFloat(textCoords.length);
-            //textCoordsBuffer.put(0, textCoords);
             FloatBuffer textCoordsBuffer = MemoryUtil.memAllocFloat(textCoords.length);
             textCoordsBuffer.put(textCoords).flip();            
 
@@ -61,8 +56,6 @@ public class Mesh {
             // Index VBO
             vboId = glGenBuffers();
             vboIdList.add(vboId);
-            //IntBuffer indicesBuffer = stack.callocInt(indices.length);
-            //indicesBuffer.put(0, indices);
             IntBuffer indicesBuffer = MemoryUtil.memAllocInt(indices.length);
             indicesBuffer.put(indices).flip();            
 
