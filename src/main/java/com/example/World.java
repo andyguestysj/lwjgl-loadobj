@@ -6,8 +6,6 @@ import java.util.Map;
 
 import org.joml.Matrix4f;
 import org.joml.Vector3f;
-import org.lwjgl.assimp.*;
-import static org.lwjgl.assimp.Assimp.*;
 
 public class World {
 
@@ -19,6 +17,7 @@ public class World {
   private TextureCache textureCache;
   private Map<String, Model> modelMap;
   private Entity cubeEntity;
+  private Entity skullEntity;
 
   public World() {
     rotation = new Vector3f(0, 0, 0);
@@ -37,43 +36,21 @@ public class World {
     addModel(testModel);
 
     cubeEntity = new Entity("cube-entity", testModel.getId());
-    cubeEntity.setPosition(0, 0, -2);
+    cubeEntity.setPosition(0f, 0f, 0f);
+    cubeEntity.updateModelMatrix();
     addEntity(cubeEntity);
 
-    objects = new ArrayList<Object>();
+    Model testModel2 = ModelLoader.loadModel("skull", "resources/models/skull.obj", textureCache);
+    addModel(testModel2);
+    
+    skullEntity = new Entity("cube-entity2", testModel2.getId());
+    skullEntity.setPosition(1.5f, 0f, 0f);    
+    skullEntity.updateModelMatrix();
+    addEntity(skullEntity);
 
-    objects.add(new Object("Cube1", "Cube", 1f, new Vector3f(0f, 0.5f, 0f), new Vector3f(0f, 0.0f, 0f),
-        new Vector3f(1f, 1f, 1f)));
-    objects.add(new Object("Cube2", "Cube", 0.5f, new Vector3f(2f, 0.25f, 0f), new Vector3f(0f, 0.0f, 0f),
-        new Vector3f(1f, 1f, 1f)));
-
-    int count = 0;
-
-    for (int x = 0; x < 11; x++) {
-      for (int z = 0; z < 11; z++) {
-        Vector3f translate = new Vector3f(0f, 0f, 0f);
-        translate.x = (float) x - 4.5f;
-        translate.z = (float) z - 4.5f;
-        if (count % 2 == 0) {
-          objects
-              .add(new Object("col1", "Square", 1f, translate, new Vector3f(0f, 0.0f, 0f), new Vector3f(1f, 1f, 1f)));
-        } else {
-          objects
-              .add(new Object("col2", "Square", 1f, translate, new Vector3f(0f, 0.0f, 0f), new Vector3f(1f, 1f, 1f)));
-        }
-        count++;
-      }
-    }
   }
 
-  public Object getObject(String name) {
-    for (Object obj : objects) {
-      if (obj.getName().equals(name)) {
-        return obj;
-      }
-    }
-    return null;
-  }
+
 
   public Matrix4f getWorldMatrix() {
     Matrix4f worldMatrix = new Matrix4f();
@@ -120,9 +97,6 @@ public class World {
   }
 
   public void cleanUpObjects() {
-    for (Object anObject : objects) {
-      anObject.cleanup();
-    }
   }
 
   public TextureCache getTextureCache() {

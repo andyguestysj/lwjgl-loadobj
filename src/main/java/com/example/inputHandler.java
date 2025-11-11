@@ -33,17 +33,6 @@ public class inputHandler {
 		commands[GLFW_KEY_Z] = setButton(new MoveCameraCommand(main, Command.Y, true));
 		commands[GLFW_KEY_X] = setButton(new MoveCameraCommand(main, Command.Y, false));
 
-		// move cube
-		Object cube = world.getObject("Cube1");		
-		commands[GLFW_KEY_I] = setButton(new MoveCubeCommand(cube, Command.Z, false));
-		commands[GLFW_KEY_K] = setButton(new MoveCubeCommand(cube, Command.Z, true));
-		commands[GLFW_KEY_J] = setButton(new MoveCubeCommand(cube, Command.X, false));
-		commands[GLFW_KEY_L] = setButton(new MoveCubeCommand(cube, Command.X, true));						
-		
-		commands[GLFW_KEY_T] = setButton(new RotateCubeCommand(cube, Command.X, true));
-		commands[GLFW_KEY_G] = setButton(new RotateCubeCommand(cube, Command.X, false));
-		commands[GLFW_KEY_F] = setButton(new RotateCubeCommand(cube, Command.Y, true));
-		commands[GLFW_KEY_H] = setButton(new RotateCubeCommand(cube, Command.Y, false));
 
 		// mouse commands
 		mouseCommands[GLFW_MOUSE_BUTTON_LEFT] = setButton(new ExitMenuCommand(main));

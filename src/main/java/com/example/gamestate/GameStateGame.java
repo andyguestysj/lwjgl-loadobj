@@ -14,7 +14,6 @@ import static org.lwjgl.opengl.GL30.glBindVertexArray;
 
 import com.example.*;
 
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
@@ -65,29 +64,15 @@ public class GameStateGame extends GameState {
         glActiveTexture(GL_TEXTURE0);
         texture.bind();
 
-        for (Mesh mesh : material.getMeshList()) {
+        for (Mesh mesh : material.getMeshList()) {          
           glBindVertexArray(mesh.getVaoId());
           for (Entity entity : entities) {
-            main.uniforms.setUniform("modelMatrix", entity.getModelMatrix());
-            System.out.println("Rendering entity " + count++);
+            main.uniforms.setUniform("modelMatrix", entity.getModelMatrix());            
             glDrawElements(GL_TRIANGLES, mesh.getNumVertices(), GL_UNSIGNED_INT, 0);
           }
         }
       }
     }
-
-    /*
-     * for (Object anObject : main.world.objects){
-     * main.uniforms.setUniform("modelMatrix", anObject.getTransforms());
-     * for (Mesh meshObj : anObject.getMeshes()) {
-     * glBindVertexArray(meshObj.getMeshID());
-     * glDrawElements(GL_TRIANGLES, meshObj.getVertexCount(), GL_UNSIGNED_INT, 0);
-     * }
-     * //glBindVertexArray(anObject.getMesh().getMeshID());
-     * //glDrawElements(GL_TRIANGLES, anObject.getMesh().getVertexCount(),
-     * GL_UNSIGNED_INT, 0);
-     * }
-     */
 
     glBindVertexArray(0);
     glUseProgram(0);
