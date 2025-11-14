@@ -1,6 +1,7 @@
 package com.example;
 
 import org.joml.*;
+import org.joml.Math;
 
 public class Entity {
 
@@ -51,7 +52,7 @@ public class Entity {
     }
 
     public void setRotation(float x, float y, float z, float angle) {
-        this.rotation.fromAxisAngleRad(x, y, z, angle);
+        this.rotation.fromAxisAngleRad(x, y, z, Math.toRadians(angle));
     }
 
     public void setScale(float scale) {

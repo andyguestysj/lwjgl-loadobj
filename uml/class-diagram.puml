@@ -1,0 +1,179 @@
+@startuml
+' Class diagram for lwjgl-loadobj
+set namespaceSeparator .
+skinparam packageStyle Rect
+skinparam classAttributeIconSize 0
+hide empty members
+
+package com.example {
+  class Main {
+    + run()
+    + cleanup()
+    + keyCallBack(key:int, action:int)
+    + mouseButtonCallback(window:long, button:int, action:int, mods:int)
+    + mousePositionCallback(window:long, xpos:double, ypos:double)
+  }
+  class World {
+    + makeObjects()
+    + addModel(model: Model)
+    + addEntity(entity: Entity)
+    + getModelMap(): Map<String, Model>
+    + getTextureCache(): TextureCache
+    + getWorldMatrix(): Matrix4f
+  }
+  class Camera {
+    + getViewMatrix(): Matrix4f
+    + getViewMatrixFPS(): Matrix4f
+    + getPerspectiveProjectionMatrix(): Matrix4f
+    + move(offset: Vector3f)
+    + setPitch(p: float)
+    + setYaw(y: float)
+  }
+  class Uniforms {
+    + programID: int
+    + createUniform(name: String)
+    + setUniform(name: String, value: Matrix4f)
+    + setUniform(name: String, value: Vector3f)
+    + setUniform(name: String, value: float)
+    + setUniform(name: String, value: Vector4f)
+  }
+  class Shaders {
+    {static} + makeShaders(): int
+  }
+  class myImGui {
+    + update(input: inputHandler)
+    + cleanup()
+  }
+  class inputHandler {
+    + processInput()
+    + executeCommands()
+    + pressKey(button: int)
+    + releaseKey(button: int)
+    + setMouseLeftButton(state: boolean)
+    + setMousePosition(x: double, y: double)
+  }
+  class CommandQueue {
+    + addCommand(cmd: commands.Command)
+    + executeCommands()
+  }
+  class Model {
+    + getId(): String
+    + getEntitiesList(): List<Entity>
+    + getMaterialList(): List<Material>
+    + cleanup()
+  }
+  class Entity {
+    + setPosition(x: float, y: float, z: float)
+    + setRotation(x: float, y: float, z: float, angle: float)
+    + setScale(scale: float)
+    + updateModelMatrix()
+    + getModelMatrix(): Matrix4f
+    + getModelId(): String
+  }
+  class Material {
+    + setDiffuseColor(value: Vector4f)
+    + setTexturePath(path: String)
+    + getDiffuseColor(): Vector4f
+    + getMeshList(): List<Mesh>
+    + getTexturePath(): String
+    + cleanup()
+  }
+  class Mesh {
+    + getNumVertices(): int
+    + getVaoId(): int
+    + cleanup()
+  }
+  class Texture {
+    + bind()
+    + cleanup()
+    + getTexturePath(): String
+  }
+  class TextureCache {
+    + createTexture(path: String): Texture
+    + getTexture(path: String): Texture
+    + cleanup()
+  }
+  class ModelLoader {
+    {static} + loadModel(id: String, path: String, cache: TextureCache): Model
+    {static} + loadModel(id: String, path: String, cache: TextureCache, flags: int): Model
+  }
+  class Object {
+    + getMeshes(): ArrayList<Mesh>
+    + getTransforms(): Matrix4f
+  }
+}
+
+package com.example.gamestate {
+  abstract class GameState {
+    + initialise()
+    + update(input: com.example.inputHandler)
+    + render(main: com.example.Main)
+    + getGameStateType(): GameStateType
+  }
+  enum GameStateType {
+    MENU
+    GAME
+  }
+  class GameStateGame
+  class GameStateMenu
+}
+
+package com.example.commands {
+  interface Command {
+    + execute()
+    + getCommand(): Command
+  }
+  class ExitMenuCommand
+  class MoveCameraCommand
+  class MoveCubeCommand
+  class MoveWorldCommand
+  class RotateCubeCommand
+  class RotateWorldCommand
+}
+
+' Generalizations
+com.example.gamestate.GameStateGame --|> com.example.gamestate.GameState
+com.example.gamestate.GameStateMenu --|> com.example.gamestate.GameState
+com.example.commands.ExitMenuCommand ..|> com.example.commands.Command
+com.example.commands.MoveCameraCommand ..|> com.example.commands.Command
+com.example.commands.MoveCubeCommand ..|> com.example.commands.Command
+com.example.commands.MoveWorldCommand ..|> com.example.commands.Command
+com.example.commands.RotateCubeCommand ..|> com.example.commands.Command
+com.example.commands.RotateWorldCommand ..|> com.example.commands.Command
+
+' Associations / dependencies
+com.example.Main --> com.example.World
+com.example.Main --> com.example.Camera
+com.example.Main --> com.example.Uniforms
+com.example.Main --> com.example.myImGui
+com.example.Main --> com.example.inputHandler
+com.example.Main o--> com.example.gamestate.GameStateGame
+com.example.Main o--> com.example.gamestate.GameStateMenu
+com.example.Main --> com.example.gamestate.GameState
+
+com.example.inputHandler --> com.example.Main
+com.example.inputHandler --> com.example.CommandQueue
+com.example.inputHandler o--> com.example.commands.Command
+com.example.CommandQueue *--> com.example.commands.Command
+
+com.example.World o--> com.example.TextureCache
+com.example.World *--> com.example.Model
+com.example.Model *--> com.example.Material
+com.example.Model *--> com.example.Entity
+com.example.Material *--> com.example.Mesh
+com.example.TextureCache *--> com.example.Texture
+
+com.example.Uniforms ..> com.example.Shaders : uses
+com.example.gamestate.GameStateGame ..> com.example.World : reads
+com.example.gamestate.GameStateGame ..> com.example.Uniforms : sets uniforms
+com.example.gamestate.GameStateGame ..> com.example.Camera : matrices
+com.example.gamestate.GameStateGame ..> com.example.TextureCache : textures
+com.example.gamestate.GameStateGame ..> com.example.Model : iterate
+com.example.gamestate.GameStateGame ..> com.example.Material : iterate
+com.example.gamestate.GameStateGame ..> com.example.Mesh : draw
+com.example.gamestate.GameStateGame ..> com.example.Entity : transform
+com.example.gamestate.GameStateGame ..> com.example.Texture : bind
+com.example.myImGui ..> com.example.Main : state
+com.example.myImGui ..> com.example.inputHandler : UI input
+
+@enduml

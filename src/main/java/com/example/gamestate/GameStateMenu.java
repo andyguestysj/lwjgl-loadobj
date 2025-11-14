@@ -14,12 +14,10 @@ import org.joml.Vector3f;
 
 import com.example.inputHandler;
 import com.example.Main;
-import com.example.Object;
 
 public class GameStateMenu extends GameState {
 
   public GameStateType state;
-  public ArrayList<Object> objects;
 
   
   
@@ -30,9 +28,6 @@ public class GameStateMenu extends GameState {
   }  
 
   public void initialise(){
-    objects = new ArrayList<Object>();
-    objects.add(new Object("col2", "Square", 1.8f, new Vector3f(0f,0.0f,0f), new Vector3f(90f,0.0f,0f),new Vector3f(1.5f,1f,1f)));
-    objects.add(new Object("col1", "Square", 2f, new Vector3f(0f,0.0f,0f), new Vector3f(90f,0.0f,0f),new Vector3f(1.5f,1f,1f))); 
     
   }
 

@@ -1,3 +1,23 @@
 {
-  "java.configuration.updateBuildConfiguration": "interactive"
+  "java.configuration.updateBuildConfiguration": "interactive",
+  // Auto-show Marp preview when front-matter contains `marp: true`
+  "markdown.marp.preview.autoShow": true,
+
+  // Enable HTML inside Marp slides and KaTeX math (optional)
+  "markdown.marp.html": true,
+  "markdown.marp.mathTypesetting": "katex",
+
+  // Associate common Marp filenames with Markdown
+  "files.associations": {
+    "*.marp.md": "markdown",
+    "slides.md": "markdown",
+    "deck.md": "markdown"
+  },
+
+  // Nice-to-haves for editing/preview experience
+  "markdown.preview.scrollPreviewWithEditor": true,
+  "markdown.preview.doubleClickToSwitchToEditor": true,
+    "markdown.marp.themes": [
+            "./Themes/beam.css"
+  ]
 }

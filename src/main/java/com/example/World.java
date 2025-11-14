@@ -28,23 +28,19 @@ public class World {
     modelMap = new HashMap<>();
 
     makeObjects();
+
+    Light light = new Light(new Vector3f(0, 5, 5), new Vector3f(1, 1, 1), 1.0f);
   }
 
   public void makeObjects() {
-
-    Model testModel = ModelLoader.loadModel("cube", "resources/models/cube.obj", textureCache);
-    addModel(testModel);
-
-    cubeEntity = new Entity("cube-entity", testModel.getId());
-    cubeEntity.setPosition(0f, 0f, 0f);
-    cubeEntity.updateModelMatrix();
-    addEntity(cubeEntity);
 
     Model testModel2 = ModelLoader.loadModel("skull", "resources/models/skull.obj", textureCache);
     addModel(testModel2);
     
     skullEntity = new Entity("cube-entity2", testModel2.getId());
-    skullEntity.setPosition(1.5f, 0f, 0f);    
+    skullEntity.setPosition(0f, -2f, 0f);    
+    skullEntity.setScale(0.2f);
+    skullEntity.setRotation( 1f, 0f,0f,-90f); 
     skullEntity.updateModelMatrix();
     addEntity(skullEntity);
 

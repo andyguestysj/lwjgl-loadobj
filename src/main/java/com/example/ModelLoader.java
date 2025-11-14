@@ -108,8 +108,9 @@ public class ModelLoader {
 
     private static Mesh processMesh(AIMesh aiMesh) {
         float[] vertices = processVertices(aiMesh);
+        float[] normals = processNormals(aiMesh);
         float[] textCoords = processTextCoords(aiMesh);
-        int[] indices = processIndices(aiMesh);
+        int[] indices = processIndices(aiMesh);        
 
         // Texture coordinates may not have been populated. We need at least the empty slots
         if (textCoords.length == 0) {
@@ -117,7 +118,7 @@ public class ModelLoader {
             textCoords = new float[numElements];
         }
 
-        return new Mesh(vertices, textCoords, indices);
+        return new Mesh(vertices, textCoords, indices, normals);
     }
 
     private static float[] processTextCoords(AIMesh aiMesh) {
@@ -131,6 +132,21 @@ public class ModelLoader {
             AIVector3D textCoord = buffer.get();
             data[pos++] = textCoord.x();
             data[pos++] = 1 - textCoord.y();
+        }
+        return data;
+    }
+
+        private static float[] processNormals(AIMesh aiMesh) {
+        AIVector3D.Buffer buffer = aiMesh.mNormals();
+        if (buffer == null) {
+            return new float[]{};
+        }
+        float[] data = new float[buffer.remaining() * 2];
+        int pos = 0;
+        while (buffer.remaining() > 0) {
+            AIVector3D norm = buffer.get();
+            data[pos++] = norm.x();
+            data[pos++] = 1 - norm.y();
         }
         return data;
     }

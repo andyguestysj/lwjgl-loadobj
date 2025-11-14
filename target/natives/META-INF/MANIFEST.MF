@@ -1,0 +1,12 @@
+Manifest-Version: 1.0
+Ant-Version: Apache Ant 1.10.13
+Created-By: 21.0.4+7-LTS (Azul Systems, Inc.)
+Specification-Title: Lightweight Java Game Library - zstd
+Specification-Version: 3.3.4
+Specification-Vendor: lwjgl.org
+Implementation-Title: lwjgl-zstd
+Implementation-Version: build 7
+Implementation-Vendor: lwjgl.org
+LWJGL-Platform: windows/x64
+Multi-Release: true
+
